@@ -14,4 +14,17 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  public double getArmAngle() {
+    // Replace with actual logic to get the arm angle
+    return 0.0;
+  }
+
+  public boolean isElevatorMovementSafe() {
+    if (this.getArmAngle() < 45) { // Replace with actual angle check
+        return true;
+    } else {
+        return false;
+    }
+  }
 }

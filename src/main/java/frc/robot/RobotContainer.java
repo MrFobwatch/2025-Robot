@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.RunArm;
 import frc.robot.commands.RunElevator;
+import frc.robot.commands.SetElevatorHeightCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.Joystick;
@@ -107,7 +108,13 @@ public class RobotContainer {
         xbox.b().whileTrue(new RunElevator(m_elevator, -.5));
         xbox.x().whileTrue(new RunElevator(m_elevator, 0));
 
+        xbox.povUp().onTrue(new SetElevatorHeightCommand(m_elevator, 24 ));
+        xbox.povDown().onTrue(new SetElevatorHeightCommand(m_elevator, 0 ));
+        xbox.povLeft().onTrue(new SetElevatorHeightCommand(m_elevator, 12 ));
+        xbox.povRight().onTrue(new SetElevatorHeightCommand(m_elevator, 36 ));
 
+        //Set elevator to zero position for calibration
+        xbox.start().onTrue(new InstantCommand(() -> m_elevator.resetElevatorPosition(), m_elevator));
     }
 
     public Command getAutonomousCommand() {

@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -73,7 +76,9 @@ public class Elevator extends SubsystemBase {
 
   }
 
- 
+ public double getHeightInches() {
+	return leaderMotor.getEncoder().getPosition();
+  }
 
 
   public void setElevatorSpeed(double speed){
@@ -87,6 +92,16 @@ public class Elevator extends SubsystemBase {
 
   public void setElevatorPosition(double position){
     pidController.setReference(position,ControlType.kPosition);
+  }
+
+  //function to reset the elevator position
+  public void resetElevatorPosition() {
+	leaderMotor.getEncoder().setPosition(0);
+  }
+
+  public boolean isAtHeight(double targetHeight, double tolerance) {
+	double currentHeight = getHeightInches();
+	return Math.abs(currentHeight - targetHeight) <= tolerance;
   }
 
   /**

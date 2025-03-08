@@ -17,7 +17,12 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int ELEVATOR_MOTOR1_ID = 1;
     public static final int ELEVATOR_MOTOR2_ID = 2;
-    public static final double pulleyDiameterInches = 2.0;
-    public static final double gearRatio = 15.0;
-    public static final double inchesPerMotorRotation = pulleyDiameterInches * Math.PI/gearRatio;}
+    public static final double elevatorPulleyDiameterInches = 2.0;
+    public static final double elevatorGearRatio = 15.0;
+    public static final double inchesPerMotorRotation = elevatorPulleyDiameterInches * Math.PI/elevatorGearRatio;
+    public static final double kMaxLinearAccelInchesPerSSquared = 0;
+    public static final double kMaxLinearRateInchesPerS = 0;
+    public static final double kElevatorKd = 0;
+    public static final double kElevatorKi = 0;
+    public static final double kElevatorKp = 0;}
 }
