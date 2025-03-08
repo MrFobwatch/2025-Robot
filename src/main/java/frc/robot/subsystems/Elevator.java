@@ -7,13 +7,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import frc.robot.Constants.OperatorConstants;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkClosedLoopController;
-//import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.ControlType;
 //import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkMaxConfig;
 //import com.revrobotics.spark.ClosedLoopSlot;
 //import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -29,7 +28,10 @@ public class Elevator extends SubsystemBase {
   private final SparkMaxConfig followerConfig;
   private final SparkMaxConfig globalConfig;
   private final SparkClosedLoopController pidController;
-  
+
+  private static final double kP = 0.1;  // Proportional gain - tune as needed
+  private static final double kI = 0.0;  // Integral gain - usually 0 at first
+  private static final double kD = 0.0;  // Derivative gain - tune as needed
   
   
   public Elevator(){
@@ -42,7 +44,6 @@ public class Elevator extends SubsystemBase {
     globalConfig = new SparkMaxConfig();
 
     pidController = leaderMotor.getClosedLoopController();
-  
 
     globalConfig
         .smartCurrentLimit(60)
@@ -50,27 +51,43 @@ public class Elevator extends SubsystemBase {
         .encoder.positionConversionFactor(OperatorConstants.inchesPerMotorRotation);
 
     leaderConfig
-        .apply(globalConfig)
-        .inverted(true);
+        .apply(globalConfig);
+
+    leaderConfig.closedLoop
+        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .p(kP)
+        .i(kI)
+        .d(kD);
     
   
     followerConfig
         .apply(globalConfig)
-        .follow(leaderMotor);
+        .follow(leaderMotor,true);
 
     
     
     leaderMotor.configure(leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     followerMotor.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    
-    
-    
-   
+
+
+
   }
 
  
 
 
+  public void setElevatorSpeed(double speed){
+    leaderMotor.set(speed);
+  }
+
+  public void stopElevator(){
+    leaderMotor.set(0);
+  }
+
+
+  public void setElevatorPosition(double position){
+    pidController.setReference(position,ControlType.kPosition);
+  }
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
@@ -87,8 +104,4 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-  }
 }
