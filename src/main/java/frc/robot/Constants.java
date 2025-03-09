@@ -25,4 +25,12 @@ public final class Constants {
     public static final double kElevatorKd = 0;
     public static final double kElevatorKi = 0;
     public static final double kElevatorKp = 0;}
+  
+  public static class ArmConstants {
+    public static final int ARM_MOTOR_ID = 3;
+    public static final double ARM_GEAR_RATIO = 1.0; // Adjust as needed
+    public static final double ARM_MAX_ANGLE = 90.0; // Maximum angle in degrees
+    public static final double ARM_MIN_ANGLE = 0.0; // Minimum angle in degrees
+    public static final double ARM_SPEED = 1.0; // Speed of the arm movement
+  }
 }

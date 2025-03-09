@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -36,6 +38,14 @@ public class Elevator extends SubsystemBase {
   private static final double kI = 0.0;  // Integral gain - usually 0 at first
   private static final double kD = 0.0;  // Derivative gain - tune as needed
   
+  private final ProfiledPIDController m_profiledController =
+    new ProfiledPIDController(
+    	OperatorConstants.kElevatorKp,
+		OperatorConstants.kElevatorKi,
+		OperatorConstants.kElevatorKd,
+		new TrapezoidProfile.Constraints(
+			OperatorConstants.kMaxLinearRateInchesPerS,
+			OperatorConstants.kMaxLinearAccelInchesPerSSquared));
   
   public Elevator(){
 

@@ -5,12 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Arm;
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class RunArm extends Command {
-  /** Creates a new RunArm. */
-  public RunArm() {
-    // Use addRequirements() here to declare subsystem dependencies.
+
+  private final Arm arm;
+  private final double speed;
+  
+    /** Creates a new RunArm. */
+    public RunArm(Arm arm, double speed) {
+      this.arm = arm;
+      this.speed = speed;
+      addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -19,7 +27,10 @@ public class RunArm extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    // Set the arm motor speed
+    arm.setArmSpeed(speed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
